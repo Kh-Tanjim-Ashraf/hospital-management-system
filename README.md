@@ -33,7 +33,7 @@ There are three user roles:
 
    > MacOS/Linux: source env/bin/activate
 
-3. Install the dependencies from "**requirements.txt**" file.
+3. Install the required packages from ["**requirements.txt**"](./requirements.txt) file.
 
    > pip install -r requirements.txt
 
@@ -41,19 +41,18 @@ There are three user roles:
 
 1.  Create a "**.env**" file inside the project's base directory.
 
-2.  Define the values accordingly to the following keys inside the file.
+2.  Define the values according to the following keys inside the sample ["**.env-example**"](./.env-example) file.
 
-        # Django
-        SECRET_KEY=
-        DEBUG=True
+## Required packages
 
-        # Database
-        DB_ENGINE=
-        DATABASE=
-        DB_USER=
-        DB_PASSWORD=
-        DB_HOST=
-        DB_PORT=
+      asgiref==3.12.1
+      Django==6.0.7
+      djangorestframework==3.17.1
+      djangorestframework_simplejwt==5.5.1
+      PyJWT==2.13.0
+      python-dotenv==1.2.2
+      sqlparse==0.5.5
+      tzdata==2026.3
 
 ## How To Run The Project
 
@@ -65,12 +64,12 @@ There are three user roles:
 
 <small>The "**server.sh**" file is located inside the project directory.</small>
 
-    > bash server
+> bash server.sh
 
 ### Optional
 
 \# To run this Django project inside the local machine, execute the following command.
 
-    > python manage.py runserver 8080
+> python manage.py runserver 8080
 
 ## API Endpoint List
