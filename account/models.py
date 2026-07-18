@@ -1,6 +1,19 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser, BaseUserManager
 from shared.models import TimestampMixins
+from django.conf import settings
+
+
+
+class User_Profile(TimestampMixins):
+
+    user_id = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    full_name = models.CharField(max_length=150, null=True, blank=True)
+    phone = models.CharField(max_length=17, null=True, blank=True)
+    address = models.CharField(max_length=255, null=True, blank=True)
+
+    def __str__(self):
+        return f"{self.user_id}: {self.full_name}"
 
 
 
@@ -10,9 +23,13 @@ class UserManager(BaseUserManager):
         if not email:
             raise ValueError("Email is required")
         
+        # Create user
         user = self.model(email=email, **extra_fields)
         user.set_password(password)
         user.save()
+
+        # Create user profile
+        User_Profile.objects.create(user_id=user)
 
         return user
 
@@ -45,15 +62,3 @@ class User(AbstractUser, TimestampMixins):
 
     def __str__(self):
         return self.email
-
-
-
-class User_Profile(TimestampMixins):
-    
-    user_id = models.OneToOneField(User, on_delete=models.CASCADE)
-    full_name = models.CharField(max_length=150, null=True, blank=True)
-    phone = models.CharField(max_length=17, null=True, blank=True)
-    address = models.CharField(max_length=255, null=True, blank=True)
-
-    def __str__(self):
-        return f"{self.pk}: {self.full_name}"
