@@ -18,8 +18,8 @@ class Appointment(TimestampMixins):
         ('canc', 'Cancelled')
     ]
 
-    patient_id = models.ForeignKey(User, related_name='patients', on_delete=models.SET_NULL, null=True, blank=True)
-    doctor_id = models.ForeignKey(Doctor, related_name='doctors', on_delete=models.SET_NULL, null=True, blank=True)
+    patient_id = models.ForeignKey(User, related_name='patient_appointments', on_delete=models.SET_NULL, null=True, blank=True)
+    doctor_id = models.ForeignKey(Doctor, related_name='doctor_appointments', on_delete=models.SET_NULL, null=True, blank=True)
     appointment_date = models.DateField(null=True, blank=True)
     appointment_time = models.TimeField(null=True, blank=True)
     status = models.CharField(max_length=4, choices=STATUS, default='pend')
