@@ -66,10 +66,24 @@ There are three user roles:
 
 > bash server.sh
 
+\# Create a superuser/admin to access the default admin panel for adminstration tasks.
+
+> python manage.py createsuperuser
+
+<small>💡 **Note:** Provide the **email, role, password** information in order to create a superuser through Django CLI.</small>
+
 ### Optional
 
 \# To run this Django project inside the local machine, execute the following command.
 
 > python manage.py runserver 8080
+
+\# To execute only the database migrations through shell script.
+
+> bash db_migration.sh
+
+## High Level Design
+
+[**Hospital-Management-System | ERD ➡️**](./doc-resources/diagrams/erd.md)
 
 ## API Endpoint List

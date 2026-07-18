@@ -42,6 +42,13 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'rest_framework',
+    'shared',
+    'account',
+    'appointment',
+    'billing',
+    'dashboard',
+    'doctor',
+    'patient',
 ]
 
 MIDDLEWARE = [
@@ -118,6 +125,12 @@ SIMPLE_JWT = {
     "BLACKLIST_AFTER_ROTATION": False,
     "UPDATE_LAST_LOGIN": True   # `last_login` field in the `auth_user` table is updated upon login (TokenObtainPairView).
 }
+
+# Custom User Model
+AUTH_USER_MODEL = 'account.User'
+
+# Duration of password reset token
+PASSWORD_RESET_TIMEOUT = 86400  
 
 # Internationalization
 # https://docs.djangoproject.com/en/6.0/topics/i18n/
