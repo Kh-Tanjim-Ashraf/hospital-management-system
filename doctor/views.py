@@ -24,3 +24,14 @@ class Doctor(APIView):
         }
 
         return Response(data=data, status=status.HTTP_200_OK)
+    
+    def post(self, request):
+        serializer = DoctorSerializer(data=request.data)
+
+        if serializer.is_valid(raise_exception=True):
+            serializer.save()
+            data = {
+                'message': 'Doctor created successfully',
+                'data': serializer.data
+            }
+            return Response(data=data, status=status.HTTP_201_CREATED)
