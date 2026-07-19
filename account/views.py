@@ -3,7 +3,8 @@ from rest_framework.response import Response
 from rest_framework import status
 from account.serializers import (
     PatientRegistrationSerializer,
-    UserLoginSerializer
+    UserLoginSerializer,
+    RequestPassowrdResetSerializer
 )
 from rest_framework_simplejwt.exceptions import AuthenticationFailed
 from rest_framework_simplejwt.tokens import RefreshToken
@@ -60,3 +61,15 @@ class UserLogin(APIView):
             else:
                 data = {'message': 'Email or password is invalid'}
                 return Response(data=data, status=status.HTTP_404_NOT_FOUND)
+
+
+
+class RequestPassowrdReset(APIView):
+    # TODO: Throttling required for the anon users
+
+    def post(self, request):
+        serializer = RequestPassowrdResetSerializer(data=request.data)
+
+        if serializer.is_valid(raise_exception=True):
+            data = {'message': 'A password reset link is send to you email address. Please check your inbox or spam'}
+            return Response(data=data, status=status.HTTP_200_OK)
