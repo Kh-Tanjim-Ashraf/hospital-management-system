@@ -6,11 +6,18 @@ from account.serializers import (
     UserLoginSerializer,
     RequestPassowrdResetSerializer,
     UserPasswordResetTokenValidationSerializer,
-    UserPasswordResetConfirmSerializer
+    UserPasswordResetConfirmSerializer,
+    UserDetailSerializer
 )
 from rest_framework_simplejwt.exceptions import AuthenticationFailed
 from rest_framework_simplejwt.tokens import RefreshToken
 from django.contrib.auth import authenticate
+from rest_framework.permissions import IsAuthenticated
+from django.contrib.auth import get_user_model
+
+
+
+User = get_user_model()
 
 
 
@@ -112,5 +119,46 @@ class UserPasswordReset(APIView):
         
         if serializer.is_valid(raise_exception=True):
             data = {'message': 'Password reset successful'}
+
+            return Response(data=data, status=status.HTTP_200_OK)
+
+
+
+class UserDetail(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        serializer = UserDetailSerializer(instance=request.user)
+
+        data = {
+            'message': 'User Profile',
+            'data': serializer.data
+        }
+
+        return Response(data=data, status=status.HTTP_200_OK)
+    
+    def put(self, request):
+        user = User.objects.get(email=request.user.email)
+        serializer = UserDetailSerializer(instance=user, data=request.data)
+
+        if serializer.is_valid(raise_exception=True):
+            serializer.save()
+            data = {
+                'message': 'Profile updated successfully',
+                'data': serializer.data
+            }
+
+            return Response(data=data, status=status.HTTP_200_OK)
+    
+    def patch(self, request):
+        user = User.objects.get(email=request.user.email)
+        serializer = UserDetailSerializer(instance=user, data=request.data, partial=True)
+
+        if serializer.is_valid(raise_exception=True):
+            serializer.save()
+            data = {
+                'message': 'Profile updated successfully',
+                'data': serializer.data
+            }
 
             return Response(data=data, status=status.HTTP_200_OK)

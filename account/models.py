@@ -7,7 +7,7 @@ from django.conf import settings
 
 class User_Profile(TimestampMixins):
 
-    user_id = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    user_id = models.OneToOneField(settings.AUTH_USER_MODEL, related_name='user_profile', on_delete=models.CASCADE)
     full_name = models.CharField(max_length=150, null=True, blank=True)
     phone = models.CharField(max_length=17, null=True, blank=True)
     address = models.CharField(max_length=255, null=True, blank=True)

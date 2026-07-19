@@ -5,6 +5,7 @@ from django.utils.encoding import force_bytes
 from django.contrib.auth.tokens import default_token_generator
 from django.conf import settings
 from django.core.mail import send_mail
+from account.models import User_Profile
 
 
 
@@ -118,3 +119,42 @@ class UserPasswordResetConfirmSerializer(UserPasswordResetTokenValidationSeriali
         user.save()
 
         return attrs
+
+
+
+class UserProfileSerializer(serializers.ModelSerializer):
+
+    id = serializers.CharField(write_only=True, required=False)
+    user_id = serializers.CharField(write_only=True, required=False)
+
+    class Meta:
+        model = User_Profile
+        fields = ['id', 'user_id', 'full_name', 'phone', 'address']
+
+
+
+class UserDetailSerializer(serializers.ModelSerializer):
+
+    user_profile = UserProfileSerializer()
+
+    class Meta:
+        model = User
+        fields = ['id', 'email', 'role', 'user_profile']
+    
+    def update(self, instance, validated_data):
+        # 1. Pop the nested data out of the validated data dictionary
+        profile_data = validated_data.pop('user_profile', None)
+
+        # 2. Update the parent fields (User instance)
+        for attr, value in validated_data.items():
+            setattr(instance, attr, value)
+        instance.save()
+
+        # 3. Update the nested fields (Profile instance)
+        if profile_data is not None:
+            profile_instance = instance.user_profile  # Get the related object
+            for attr, value in profile_data.items():
+                setattr(profile_instance, attr, value)
+            profile_instance.save()
+
+        return instance
