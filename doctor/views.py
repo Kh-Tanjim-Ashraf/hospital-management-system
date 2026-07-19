@@ -19,7 +19,7 @@ class Doctor(APIView):
         serializer = DoctorSerializer(instance=doctors, many=True)
 
         data = {
-            'message': 'Doctor Information',
+            'message': 'Doctor List Information',
             'data': serializer.data
         }
 
@@ -35,3 +35,18 @@ class Doctor(APIView):
                 'data': serializer.data
             }
             return Response(data=data, status=status.HTTP_201_CREATED)
+
+
+
+class DoctorDetail(APIView):
+
+    def get(self, request, id):
+        doctor = DoctorModel.objects.get(pk=id)
+        serializer = DoctorSerializer(instance=doctor)
+
+        data = {
+            'message': 'Doctor Information',
+            'data': serializer.data
+        }
+
+        return Response(data=data, status=status.HTTP_200_OK)
