@@ -4,7 +4,9 @@ from rest_framework import status
 from account.serializers import (
     PatientRegistrationSerializer,
     UserLoginSerializer,
-    RequestPassowrdResetSerializer
+    RequestPassowrdResetSerializer,
+    UserPasswordResetTokenValidationSerializer,
+    UserPasswordResetConfirmSerializer
 )
 from rest_framework_simplejwt.exceptions import AuthenticationFailed
 from rest_framework_simplejwt.tokens import RefreshToken
@@ -72,4 +74,43 @@ class RequestPassowrdReset(APIView):
 
         if serializer.is_valid(raise_exception=True):
             data = {'message': 'A password reset link is send to you email address. Please check your inbox or spam'}
+            return Response(data=data, status=status.HTTP_200_OK)
+
+
+
+class UserPasswordReset(APIView):
+
+    # Select different serializer based on method requests; Optional
+    def get_serializer_class(self):
+        if self.request.method == 'GET':
+            return UserPasswordResetTokenValidationSerializer
+        return UserPasswordResetConfirmSerializer
+
+    # For validating token; Response immediately if invalid so that the frontend can show this error message beforehand, rather than showing that after submitting the password & confirm passwords into `POST` request
+    def get(self, request, uid, token):
+        # Included uid & token into request.data dictionary
+
+        # Reason: The `UserPasswordResetTokenValidationSerializer` is the parent-serializer-class for for the `GET` & `POST` APIs; & this serializer-class is accessing these values through `attrs.get()` method. So to make the serializer code clean & more readable by avoiding to use `self.context` technique to pass these values into the serializers
+        
+        request.data.setdefault('uid', uid)
+        request.data.setdefault('token', token)
+
+        serializer = self.get_serializer_class()(data=request.data)
+
+        if serializer.is_valid(raise_exception=True):
+            data = {'message': 'Token is valid. Proceed to reset password'}
+
+            return Response(data=data, status=status.HTTP_200_OK)
+
+    # Still validates token, but updates the user password this time 
+    def post(self, request, uid, token):
+        # Included uid & token into request.data dictionary
+        request.data.setdefault('uid', uid)
+        request.data.setdefault('token', token)
+
+        serializer = self.get_serializer_class()(data=request.data)
+        
+        if serializer.is_valid(raise_exception=True):
+            data = {'message': 'Password reset successful'}
+
             return Response(data=data, status=status.HTTP_200_OK)
