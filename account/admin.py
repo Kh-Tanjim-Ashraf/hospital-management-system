@@ -4,7 +4,12 @@ from django.contrib.auth.admin import UserAdmin
 from account.models import User_Profile
 
 
+
 User = get_user_model()
+
+
+# TODO: Automatically create a user profile for user record with any role (Admin/Doctor/Patient) into `User_Profile` table when an admin creates that from the Default Admin Panel. Utilizing a custom `UserCreationForm`
+
 
 
 @admin.register(User)
