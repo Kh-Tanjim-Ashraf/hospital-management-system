@@ -37,6 +37,7 @@ def get_tokens_for_user(user):
 class PatientRegistration(APIView):
 
     def post(self, request):
+        # TODO: Handle the use-case of registering only a user with 'Patient' role, not an admin or a doctor
         serializer = PatientRegistrationSerializer(data=request.data)
 
         if serializer.is_valid(raise_exception=True):

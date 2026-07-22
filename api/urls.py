@@ -1,0 +1,28 @@
+from django.urls import path, include
+from account.views import (
+    PatientRegistration, 
+    UserLogin,
+    RequestPasswordReset,
+    UserPasswordReset,
+    UserDetail,
+)
+from rest_framework_simplejwt.views import TokenRefreshView
+from doctor.views import Doctor, DoctorDetail
+
+
+
+urlpatterns = [
+    # Account
+    path('register/', view=PatientRegistration.as_view()),
+    path('login/', view=UserLogin.as_view()),
+    path('token/refresh/', view=TokenRefreshView.as_view()),
+    path('forgot-password/', view=RequestPasswordReset.as_view()),
+    path('reset-password/<str:uid>/<str:token>/', view=UserPasswordReset.as_view()),
+
+    # Profile Management
+    path('profile/', view=UserDetail.as_view()),
+
+    # Doctor
+    path('doctors/', view=Doctor.as_view()),
+    path('doctor/<int:id>/', view=DoctorDetail.as_view()),
+]

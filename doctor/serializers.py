@@ -12,7 +12,7 @@ User = get_user_model()
 
 class DoctorSerializer(serializers.ModelSerializer):
 
-    user_id = UserDetailSerializer()
+    user_id = UserDetailSerializer(required=False)  # Defined `required=False` because if client wants to only update the field(s) of `Doctor`, then it should not raise an error to provide other user information through `user_id` field.
     visiting_fee = serializers.DecimalField(required=False, max_digits=8, decimal_places=2)
 
     class Meta:
@@ -28,7 +28,6 @@ class DoctorSerializer(serializers.ModelSerializer):
 
         # Create `User_Profile` instance
         User_Profile.objects.create(user_id=user_instance, **user_profile)
-
         
         doctor_instance = Doctor.objects.create(user_id=user_instance, **validated_data)
         
