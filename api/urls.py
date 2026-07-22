@@ -8,6 +8,7 @@ from account.views import (
 )
 from rest_framework_simplejwt.views import TokenRefreshView
 from doctor.views import Doctor, DoctorDetail
+from appointment.views import Appointment
 
 
 
@@ -25,4 +26,7 @@ urlpatterns = [
     # Doctor
     path('doctors/', view=Doctor.as_view()),
     path('doctor/<int:id>/', view=DoctorDetail.as_view()),
+
+    # Appointment
+    path('appointments/', view=Appointment.as_view()),
 ]
