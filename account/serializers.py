@@ -124,7 +124,7 @@ class UserPasswordResetConfirmSerializer(UserPasswordResetTokenValidationSeriali
 
 class UserProfileSerializer(serializers.ModelSerializer):
 
-    id = serializers.CharField(write_only=True, required=False)
+    # This field gets optional to be passed as part of the JSON data when hitting the update API when required=False; The `write_only=True` never returns `user_id` in the API response.
     user_id = serializers.CharField(write_only=True, required=False)
 
     class Meta:
@@ -140,6 +140,12 @@ class UserDetailSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = ['id', 'email', 'role', 'user_profile']
+        # Bypass the automatically generated UniqueValidator of DRF for `email` field & let "DoctorSerializer" to execute the `update()` method of it's own class.
+        extra_kwargs = {
+            "email": {
+                "validators": []
+            }
+        }
     
     def update(self, instance, validated_data):
         # 1. Pop the nested data out of the validated data dictionary
@@ -158,3 +164,20 @@ class UserDetailSerializer(serializers.ModelSerializer):
             profile_instance.save()
 
         return instance
+
+"""
+
+Note:
+=====
+There are two main methods for updating date through nested serializer:
+
+Method#1 Using `setattr()` method inside the for-loop of popped out dictionary provided from client.
+    # Applied in the `update()` method of `UserDetailSerializer`
+
+Method#2 Passing the popped out dictionary directly into nested serializer as `data` argument, also defined the `partial=True` so that it can handle any n-level of missing data.
+    # Applied in the `update()` method of `DoctorSerializer`
+
+***Method#2 is more preferable since it allows code re-usability by adding the updated data through the nested serializer and it will automatically updates any other nested data inside the parent-nested data. 
+    i.e. Doctor has 1:1 relationship with User & User has 1:1 relationship with User_Profile. So when passing the new value to update doctor data, if a client wants to update the user/user_profile data, passing the popped out dictionary into the nested serializer of UserDetailSerializer will automatically update the User model data as well as User_Profile model data.
+
+"""

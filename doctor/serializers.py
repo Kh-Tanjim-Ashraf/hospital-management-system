@@ -16,7 +16,7 @@ class DoctorSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Doctor
-        fields = ['name', 'visiting_fee', 'user_id']
+        fields = ['id', 'name', 'visiting_fee', 'user_id']
 
     def create(self, validated_data):
         user_data = validated_data.pop('user_id')
@@ -32,3 +32,20 @@ class DoctorSerializer(serializers.ModelSerializer):
         doctor_instance = Doctor.objects.create(user_id=user_instance, **validated_data)
         
         return doctor_instance
+    
+    def update(self, instance, validated_data):
+        user_data = validated_data.pop('user_id', None)
+
+        # Update `Doctor` model data
+        for attr, value in validated_data.items():
+            setattr(instance, attr, value)
+        
+        instance.save()
+        
+        # Update the data of `User` & `User_Profile` models
+        if user_data:
+            user_detail_serializer = UserDetailSerializer(instance=instance.user_id, data=user_data, partial=True)
+            user_detail_serializer.is_valid(raise_exception=True)
+            user_detail_serializer.save()
+        
+        return instance
