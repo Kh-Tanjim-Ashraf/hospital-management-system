@@ -80,3 +80,13 @@ class DoctorDetail(APIView):
             }
 
             return Response(data=data, status=status.HTTP_200_OK)
+    
+    def delete(self, request, id):
+        doctor = DoctorModel.objects.get(pk=id)
+
+        # Delete the user record, which has a cascade effect of deleteing the doctor & user records associated with it
+        doctor.user_id.delete()
+
+        data = {'message': 'Doctor information deleted successfully',}
+
+        return Response(data=data, status=status.HTTP_204_NO_CONTENT)
