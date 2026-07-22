@@ -4,7 +4,7 @@ from rest_framework import status
 from account.serializers import (
     PatientRegistrationSerializer,
     UserLoginSerializer,
-    RequestPassowrdResetSerializer,
+    RequestPasswordResetSerializer,
     UserPasswordResetTokenValidationSerializer,
     UserPasswordResetConfirmSerializer,
     UserDetailSerializer
@@ -73,11 +73,11 @@ class UserLogin(APIView):
 
 
 
-class RequestPassowrdReset(APIView):
+class RequestPasswordReset(APIView):
     # TODO: Throttling required for the anon users
 
     def post(self, request):
-        serializer = RequestPassowrdResetSerializer(data=request.data)
+        serializer = RequestPasswordResetSerializer(data=request.data)
 
         if serializer.is_valid(raise_exception=True):
             data = {'message': 'A password reset link is send to you email address. Please check your inbox or spam'}
@@ -97,7 +97,7 @@ class UserPasswordReset(APIView):
     def get(self, request, uid, token):
         # Included uid & token into request.data dictionary
 
-        # Reason: The `UserPasswordResetTokenValidationSerializer` is the parent-serializer-class for for the `GET` & `POST` APIs; & this serializer-class is accessing these values through `attrs.get()` method. So to make the serializer code clean & more readable by avoiding to use `self.context` technique to pass these values into the serializers
+        # Reason: The `UserPasswordResetTokenValidationSerializer` is the parent-serializer-class for the `GET` & `POST` APIs; & this serializer-class is accessing these values through `attrs.get()` method. So I made the serializer code clean & more readable by avoiding to use `self.context` technique to pass these values into the serializers
         
         request.data.setdefault('uid', uid)
         request.data.setdefault('token', token)
