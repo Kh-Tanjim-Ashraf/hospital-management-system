@@ -136,6 +136,7 @@ class UserProfileSerializer(serializers.ModelSerializer):
 class UserDetailSerializer(serializers.ModelSerializer):
 
     user_profile = UserProfileSerializer()
+    email = serializers.EmailField(max_length=255, required=False)
 
     class Meta:
         model = User

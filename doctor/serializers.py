@@ -13,6 +13,7 @@ User = get_user_model()
 class DoctorSerializer(serializers.ModelSerializer):
 
     user_id = UserDetailSerializer()
+    visiting_fee = serializers.DecimalField(required=False, max_digits=8, decimal_places=2)
 
     class Meta:
         model = Doctor
