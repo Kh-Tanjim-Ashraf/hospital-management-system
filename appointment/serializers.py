@@ -17,6 +17,13 @@ class AppointmentSerializer(serializers.ModelSerializer):
     patient_id = UserDetailSerializer(required=False)
     doctor_id = DoctorSerializer(required=False)
 
+    # Utilize `required=False` argument for creating billing information conveniently
+    appointment_date = serializers.DateField(required=False)
+    appointment_time = serializers.TimeField(required=False)
+
+    # Explicitly defined `id` field for retrieving appointment record only by `id`, thus create billing information conveniently
+    id = serializers.IntegerField(required=False)
+
     class Meta:
         model = Appointment
         fields = ['id', 'patient_id', 'doctor_id', 'appointment_date', 'appointment_time', 'status']

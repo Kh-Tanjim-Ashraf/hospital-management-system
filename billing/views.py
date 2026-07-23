@@ -18,3 +18,16 @@ class Billing(APIView):
         }
         
         return Response(data=data, status=status.HTTP_200_OK)
+
+    def post(self, request):
+        serializer = BillingSerializer(data=request.data)
+
+        if serializer.is_valid(raise_exception=True):
+            serializer.save()
+
+            data = {
+                'message': 'Bill list',
+                'data': serializer.data
+            }
+
+            return Response(data=data, status=status.HTTP_201_CREATED)
