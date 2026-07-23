@@ -19,3 +19,16 @@ class Appointment(APIView):
         }
 
         return Response(data=data, status=status.HTTP_200_OK)
+
+    def post(self, request):
+        serializer = AppointmentSerializer(data=request.data)
+
+        if serializer.is_valid(raise_exception=True):
+            serializer.save()
+
+            data = {
+                'message': 'Appointment created successfully',
+                'data': serializer.data
+            }
+
+            return Response(data=data)

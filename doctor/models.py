@@ -8,7 +8,7 @@ User = get_user_model()
 
 class Doctor(TimestampMixins):
 
-    user_id = models.OneToOneField(User, on_delete=models.CASCADE)
+    user_id = models.OneToOneField(User, related_name='doctor', on_delete=models.CASCADE)
     name = models.CharField(max_length=150, null=True, blank=True)
     visiting_fee = models.DecimalField(max_digits=8, decimal_places=2)
 

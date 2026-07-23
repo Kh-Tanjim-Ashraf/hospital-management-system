@@ -135,7 +135,7 @@ class UserProfileSerializer(serializers.ModelSerializer):
 
 class UserDetailSerializer(serializers.ModelSerializer):
 
-    user_profile = UserProfileSerializer()
+    user_profile = UserProfileSerializer(required=False)    # Utilize `required=False` to book an appointment with only user emails
     email = serializers.EmailField(max_length=255, required=False)
 
     class Meta:
