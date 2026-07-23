@@ -32,3 +32,18 @@ class Appointment(APIView):
             }
 
             return Response(data=data)
+
+
+
+class AppointmentDetail(APIView):
+
+    def get(self, request, id):
+        appointment = AppointmentModel.objects.get(pk=id)
+        serializer = AppointmentSerializer(instance=appointment)
+        
+        data = {
+            'message': 'Appointment information',
+            'data': serializer.data
+        }
+
+        return Response(data=data, status=status.HTTP_200_OK)

@@ -19,7 +19,7 @@ class AppointmentSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Appointment
-        fields = ['patient_id', 'doctor_id', 'appointment_date', 'appointment_time', 'status']
+        fields = ['id', 'patient_id', 'doctor_id', 'appointment_date', 'appointment_time', 'status']
 
     def create(self, validated_data):
 
