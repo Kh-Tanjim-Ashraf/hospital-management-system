@@ -41,8 +41,36 @@ class BillingDetail(APIView):
         serializer = BillingSerializer(instance=bill)
 
         data = {
-            'message': 'Appointment information',
+            'message': 'Billing information',
             'data': serializer.data
         }
 
         return Response(data=data, status=status.HTTP_200_OK)
+
+    def put(self, request, id):
+        bill = BillingModel.objects.get(pk=id)
+        serializer = BillingSerializer(instance=bill, data=request.data)
+
+        if serializer.is_valid(raise_exception=True):
+            serializer.save()
+        
+            data = {
+                'message': 'Billing information updated successfully',
+                'data': serializer.data
+            }
+
+            return Response(data=data, status=status.HTTP_200_OK)
+
+    def patch(self, request, id):
+        bill = BillingModel.objects.get(pk=id)
+        serializer = BillingSerializer(instance=bill, data=request.data, partial=True)
+
+        if serializer.is_valid(raise_exception=True):
+            serializer.save()
+        
+            data = {
+                'message': 'Billing information updated successfully',
+                'data': serializer.data
+            }
+
+            return Response(data=data, status=status.HTTP_200_OK)

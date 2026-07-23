@@ -65,7 +65,7 @@ class AppointmentDetail(APIView):
     
     def patch(self, request, id):
         appointment = AppointmentModel.objects.get(pk=id)
-        serializer = AppointmentSerializer(instance=appointment, data=request.data)
+        serializer = AppointmentSerializer(instance=appointment, data=request.data, partial=True)
 
         if serializer.is_valid(raise_exception=True):
             serializer.save()

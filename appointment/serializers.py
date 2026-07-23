@@ -47,6 +47,8 @@ class AppointmentSerializer(serializers.ModelSerializer):
         patient_id = validated_data.pop('patient_id', None)
         doctor_id = validated_data.pop('doctor_id', None)
 
+        # TODO: Include the `patient_id` & `doctor_id` in the update process since the patient/doctor can be changed againsts the same appointment.
+
         for attr, value in validated_data.items():
             setattr(instance, attr, value)
 
