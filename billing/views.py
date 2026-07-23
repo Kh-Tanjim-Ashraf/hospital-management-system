@@ -31,3 +31,18 @@ class Billing(APIView):
             }
 
             return Response(data=data, status=status.HTTP_201_CREATED)
+
+
+
+class BillingDetail(APIView):
+
+    def get(self, request, id):
+        bill = BillingModel.objects.get(pk=id)
+        serializer = BillingSerializer(instance=bill)
+
+        data = {
+            'message': 'Appointment information',
+            'data': serializer.data
+        }
+
+        return Response(data=data, status=status.HTTP_200_OK)
