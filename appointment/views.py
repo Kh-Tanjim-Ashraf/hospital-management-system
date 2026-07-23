@@ -47,3 +47,17 @@ class AppointmentDetail(APIView):
         }
 
         return Response(data=data, status=status.HTTP_200_OK)
+
+    def put(self, request, id):
+        appointment = AppointmentModel.objects.get(pk=id)
+        serializer = AppointmentSerializer(instance=appointment, data=request.data)
+
+        if serializer.is_valid(raise_exception=True):
+            serializer.save()
+
+            data = {
+                'message': 'Appointment information updated successfully',
+                'data': serializer.data
+            }
+
+            return Response(data=data, status=status.HTTP_200_OK)

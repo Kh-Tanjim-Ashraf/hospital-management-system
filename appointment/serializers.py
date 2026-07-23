@@ -13,7 +13,7 @@ User = get_user_model()
 
 class AppointmentSerializer(serializers.ModelSerializer):
 
-    # The `required=False` argument is to make this serializer suitable for partial update; Also make these fields as read-only
+    # The `required=False` argument is to make this serializer suitable for partial update
     patient_id = UserDetailSerializer(required=False)
     doctor_id = DoctorSerializer(required=False)
 
@@ -34,3 +34,15 @@ class AppointmentSerializer(serializers.ModelSerializer):
             doctor_id=doctor,
             **validated_data
         )
+
+    def update(self, instance, validated_data):
+
+        patient_id = validated_data.pop('patient_id', None)
+        doctor_id = validated_data.pop('doctor_id', None)
+
+        for attr, value in validated_data.items():
+            setattr(instance, attr, value)
+
+        instance.save()
+
+        return instance
