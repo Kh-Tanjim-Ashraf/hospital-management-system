@@ -18,6 +18,7 @@ class Billing(TimestampMixins):
     consultation_fee = models.DecimalField(max_digits=8, decimal_places=2)
     discount = models.DecimalField(max_digits=7, decimal_places=2)
     total_amount = models.DecimalField(max_digits=8, decimal_places=2)
+    is_deleted = models.BooleanField(default=False)
 
     def __str__(self):
         return f"Patient: {self.patient_id}; Doctor: {self.doctor_id}; Total: {self.total_amount}"

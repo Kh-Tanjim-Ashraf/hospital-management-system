@@ -9,7 +9,7 @@ from billing.models import Billing as BillingModel
 class Billing(APIView):
 
     def get(self, request):
-        bills = BillingModel.objects.all()
+        bills = BillingModel.objects.filter(is_deleted=False)
         serializer = BillingSerializer(instance=bills, many=True)
         
         data = {
@@ -74,3 +74,10 @@ class BillingDetail(APIView):
             }
 
             return Response(data=data, status=status.HTTP_200_OK)
+
+    def delete(self, request, id):
+        bill = BillingModel.objects.get(pk=id)
+        bill.is_deleted = True
+        bill.save()
+
+        return Response(status=status.HTTP_204_NO_CONTENT)
