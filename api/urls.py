@@ -10,6 +10,7 @@ from rest_framework_simplejwt.views import TokenRefreshView
 from doctor.views import Doctor, DoctorDetail
 from appointment.views import Appointment, AppointmentDetail
 from billing.views import Billing, BillingDetail
+from dashboard.views import DashboardSummary
 
 
 
@@ -35,4 +36,7 @@ urlpatterns = [
     # Billing
     path('bills/', view=Billing.as_view()),
     path('bills/<int:id>/', view=BillingDetail.as_view()),
+
+    # Dashboard Summary
+    path('dashboard/', view=DashboardSummary.as_view())
 ]
